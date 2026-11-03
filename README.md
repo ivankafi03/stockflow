@@ -1,127 +1,113 @@
-# 📦 StockFlow — Smart Inventory & Asset Tracker
+# StockFlow - Enterprise Inventory & Asset Tracking System
 
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
-[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-black?style=flat-square&logo=laravel)](https://laravel.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-black?style=flat-square&logo=tailwind-css)](https://tailwindcss.com)
+[![PHP](https://img.shields.io/badge/PHP-8.1+-black?style=flat-square&logo=php)](https://www.php.net/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-black?style=flat-square)](https://opensource.org/licenses/MIT)
 
-**StockFlow** adalah aplikasi web manajemen inventaris dan pelacakan aset operasional (*real-time inventory & stock audit trail*). Dirancang untuk mempermudah bisnis, pergudangan, maupun divisi operasional kantor dalam memonitor saldo persediaan barang, mencatat mutasi barang masuk/keluar, mendeteksi stok menipis secara otomatis (*low stock warning*), serta mengekspor data inventaris ke format CSV/Excel.
-
----
-
-## ✨ Fitur Utama
-
-- **📊 Comprehensive Executive Dashboard:**
-  - Ringkasan metrik total jenis barang, kuantitas unit fisik di gudang, dan total valuasi nilai aset rupiah.
-  - Kartu peringatan interaktif untuk barang dengan status **Stok Menipis** dan **Stok Habis (0)**.
-  - Tabel aktivitas audit mutasi stok terkini secara real-time.
-
-- **🏷️ Master Data Barang & Katalog:**
-  - Penomoran kode SKU unik (*auto-suggestion* & custom).
-  - Klasifikasi barang berdasarkan multi-kategori.
-  - Upload & preview foto barang.
-  - Multi-satuan fisik (*Pcs, Box, Roll, Pack, Kg, Unit, dll.*).
-  - Pencatatan harga modal (beli) dan harga jual.
-
-- **🔄 Sistem Mutasi Stok Transaksional (ACID Compliant):**
-  - **Barang Masuk (+ In):** Pengadaan / Restock dari supplier dengan pencatatan nomor PO / Surat Jalan.
-  - **Barang Keluar (- Out):** Pemakaian operasional atau penjualan dengan validasi stok otomatis (mencegah stok minus).
-  - Setiap mutasi dibungkus dalam `DB::transaction()` untuk integritas data persediaan.
-
-- **⚠️ Automated Low Stock Warning:**
-  - Sistem otomatis memberi tanda peringatan kuning (*warning*) jika sisa stok $\le$ batas minimum (*min_stock*).
-  - Tanda merah menyala (*danger*) jika stok habis total.
-
-- **📁 Filter Cepat & Ekspor CSV:**
-  - Filter barang berdasarkan kategori, status stok (Aman / Menipis / Habis), dan pencarian instan nama atau SKU.
-  - Satu klik untuk download seluruh rekapitulasi data inventaris ke format CSV (kompatibel penuh dengan Microsoft Excel berkat UTF-8 BOM).
-
-- **🔐 Autentikasi & Keamanan:**
-  - Sistem login, registrasi, dan manajemen profil pengguna terenkripsi menggunakan Laravel Breeze.
+StockFlow adalah sistem informasi manajemen inventaris dan logistik pergudangan terintegrasi. Sistem ini dikembangkan untuk mengoptimalkan pencatatan mutasi barang, menjaga akurasi saldo persediaan, melakukan evaluasi valuasi aset, serta memberikan pengawasan ambang batas persediaan minimum secara terotomatisasi.
 
 ---
 
-## 🛠️ Tech Stack & Arsitektur
+## Modul dan Fungsionalitas Utama
 
-- **Backend:** Laravel 10 (PHP 8.1+)
-- **Frontend / UI:** Blade Templates, Tailwind CSS, Alpine.js, Vite
-- **Database:** SQLite (default zero-configuration, langsung jalan tanpa setup MySQL) / MySQL Ready
-- **Pola Desain:** MVC (Model - View - Controller), Eloquent ORM, Database Transactions, Seeders & Factories
+### 1. Executive Dashboard & Reporting
+- Monitoring metrik operasional mencakup total ragam item, volume unit fisik, dan valuasi aset total berbasis harga perolehan.
+- Notifikasi status persediaan kritis (*Low Stock Alert* dan *Stock Depleted*).
+- Audit trail transaksi persediaan terkini secara real-time.
+
+### 2. Manajemen Master Data Katalog
+- Pengelolaan kode identifikasi unik (Stock Keeping Unit / SKU).
+- Struktur kategorisasi berjenjang.
+- Dokumentasi visual spesifikasi barang.
+- Konfigurasi satuan pengukuran (Pieces, Box, Kilogram, Roll, dsb.).
+- Parameterisasi harga perolehan dan nilai jual.
+
+### 3. Kontrol Mutasi Persediaan (ACID Transactional)
+- **Inbound Transaction:** Pencatatan penerimaan persediaan dan restock disertai dokumentasi Purchase Order / Surat Jalan.
+- **Outbound Transaction:** Pengeluaran persediaan untuk kebutuhan operasional atau distribusi dengan validasi ketersediaan stok fisik guna mencegah anomali kuantitas negatif.
+- Integritas data dikelola menggunakan Database Transactions.
+
+### 4. Pelaporan dan Ekspor Data
+- Penyaringan data inventaris berdasarkan kategori, status kondisi persediaan, dan parameter pencarian.
+- Fitur ekspor seluruh data master persediaan ke format CSV/Excel terstandarisasi dengan kompatibilitas UTF-8 BOM.
+
+### 5. Keamanan dan Autentikasi Pengguna
+- Manajemen hak akses dan verifikasi profil berbasis otentikasi terenkripsi.
 
 ---
 
-## 🚀 Panduan Instalasi Cepat (Local Setup)
+## Arsitektur Perangkat Lunak
 
-Ikuti langkah-langkah mudah berikut untuk menjalankan projek ini di komputermu:
+- **Framework Backend:** Laravel 10 (PHP 8.1+)
+- **Arsitektur Antarmuka:** Blade Component Architecture, Tailwind CSS, Alpine.js, Vite
+- **Database Engine:** SQLite / MySQL Ready
+- **Pola Desain:** Model-View-Controller (MVC), Eloquent ORM, Database Transactions
 
-### 1. Clone Repositori
+---
+
+## Prosedur Instalasi Lingkungan Lokal
+
+Berikut adalah prosedur konfigurasi sistem pada lingkungan pengujian lokal:
+
+### 1. Kloning Repositori
 ```bash
-git clone https://github.com/USERNAME_KAMU/stockflow.git
+git clone https://github.com/USERNAME_GITHUB/stockflow.git
 cd stockflow
 ```
 
-### 2. Install Dependensi PHP & Node.js
+### 2. Instalasi Dependensi
 ```bash
 composer install
 npm install
 ```
 
-### 3. Setup Environment File
+### 3. Konfigurasi Lingkungan (.env)
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-### 4. Setup Database & Jalankan Seeder
+### 4. Inisialisasi Database dan Data Pengujian
 ```bash
-# Inisialisasi database SQLite kosong (jika belum ada)
 touch database/database.sqlite
-
-# Migrasi tabel dan isi dengan data dummy simulasi lengkap
 php artisan migrate:fresh --seed
 ```
 
-### 5. Hubungkan Storage Symlink
+### 5. Tautan Penyimpanan Berkas
 ```bash
 php artisan storage:link
 ```
 
-### 6. Compile Aset & Jalankan Server Lokal
+### 6. Kompilasi Aset dan Menjalankan Server
 ```bash
-# Compile aset CSS/JS
 npm run build
-
-# Jalankan server Laravel
 php artisan serve
 ```
 
-Buka browsermu di: **`http://127.0.0.1:8000`** 🎉
+Sistem dapat diakses melalui browser pada alamat: `http://127.0.0.1:8000`
 
 ---
 
-## 🔑 Akun Demo (Default Login)
+## Akun Otentikasi Pengujian
 
-Database seeder sudah menyediakan akun demo siap pakai:
+Untuk pengujian sistem, akun administratif bawaan yang tersedia:
 
-| Field | Keterangan |
+| Atribut | Keterangan |
 | :--- | :--- |
-| **URL Login** | `http://127.0.0.1:8000/login` |
-| **Email** | `admin@stockflow.test` |
-| **Password** | `password` |
+| **Endpoint Login** | `http://127.0.0.1:8000/login` |
+| **Username / Email** | `admin@stockflow.test` |
+| **Kata Sandi** | `password` |
 
 ---
 
-## 🗄️ Relasi Database (Schema Overview)
+## Skema Relasional Database
 
-- **`categories`** (1) $\longleftrightarrow$ (M) **`items`**
-  - Satu kategori memiliki banyak item barang.
-- **`items`** (1) $\longleftrightarrow$ (M) **`stock_movements`**
-  - Setiap mutasi stok (in/out) terhubung langsung ke item barang terkait.
-- **`users`** (1) $\longleftrightarrow$ (M) **`stock_movements`**
-  - Setiap pergerakan stok memiliki audit log yang mencatat siapa user/operator yang menginput transaksi.
+- **Categories to Items (One-to-Many):** Klasifikasi hierarkis setiap entitas barang.
+- **Items to Stock Movements (One-to-Many):** Seluruh rekaman mutasi kuantitas terikat pada entitas barang secara spesifik.
+- **Users to Stock Movements (One-to-Many):** Akuntabilitas pencatatan transaksi terasosiasi langsung dengan identitas personil yang bertugas.
 
 ---
 
-## 📜 Lisensi
-Projek ini dibuat di bawah lisensi [MIT License](LICENSE). Bebas digunakan dan dikembangkan untuk keperluan portofolio, pembelajaran, maupun referensi profesional.
+## Lisensi
+Projek ini dilisensikan di bawah ketentuan [MIT License](LICENSE).

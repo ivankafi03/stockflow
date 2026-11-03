@@ -39,8 +39,8 @@
                     @if ($item->image_url)
                         <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="w-full h-full object-contain">
                     @else
-                        <span class="text-6xl text-gray-300">📦</span>
-                        <p class="text-xs text-gray-400 mt-2">Tidak ada foto</p>
+                        <svg class="w-16 h-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        <p class="text-xs text-slate-400 mt-2 font-medium">Dokumentasi Visual Belum Tersedia</p>
                     @endif
                 </div>
 
