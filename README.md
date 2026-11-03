@@ -52,7 +52,7 @@ Berikut adalah prosedur konfigurasi sistem pada lingkungan pengujian lokal:
 
 ### 1. Kloning Repositori
 ```bash
-git clone https://github.com/USERNAME_GITHUB/stockflow.git
+git clone https://github.com/ivankafi03/stockflow.git
 cd stockflow
 ```
 
