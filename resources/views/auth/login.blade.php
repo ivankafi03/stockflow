@@ -1,4 +1,13 @@
 <x-guest-layout>
+    <!-- Demo Credentials Notice -->
+    <div class="mb-5 p-3 rounded bg-slate-50 border border-slate-200 text-xs text-slate-600">
+        <span class="font-bold text-slate-800 block mb-1">Akses Akun Demo:</span>
+        <div class="font-mono text-[11px] text-slate-700">
+            Email: <span class="font-semibold text-blue-700">admin@stockflow.test</span><br>
+            Password: <span class="font-semibold text-blue-700">password</span>
+        </div>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
