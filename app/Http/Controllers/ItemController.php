@@ -15,7 +15,6 @@ class ItemController extends Controller
     {
         $query = Item::with('category');
 
-        // Search by name or SKU
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
@@ -23,12 +22,10 @@ class ItemController extends Controller
             });
         }
 
-        // Filter by category
         if ($categoryId = $request->input('category_id')) {
             $query->where('category_id', $categoryId);
         }
 
-        // Filter by stock status
         if ($status = $request->input('status')) {
             if ($status === 'low_stock') {
                 $query->whereColumn('stock', '<=', 'min_stock')->where('stock', '>', 0);
@@ -48,7 +45,6 @@ class ItemController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name')->get();
-        // Generate recommended next SKU
         $nextSku = 'STK-' . strtoupper(Str::random(6));
 
         return view('items.create', compact('categories', 'nextSku'));
@@ -70,24 +66,22 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('items', 'public');
-            $validated['image'] = $path;
+            $validated['image'] = $request->file('image')->store('items', 'public');
         }
 
         $item = Item::create($validated);
 
-        // Record initial stock movement if initial stock > 0
         if ($item->stock > 0) {
             $item->stockMovements()->create([
                 'user_id'          => auth()->id(),
                 'type'             => 'in',
                 'quantity'         => $item->stock,
                 'reference_number' => 'INITIAL-STOCK',
-                'notes'            => 'Stok awal saat barang didaftarkan',
+                'notes'            => 'Pencatatan persediaan awal saat pendaftaran item.',
             ]);
         }
 
-        return redirect()->route('items.index')->with('success', "Barang {$item->name} berhasil ditambahkan!");
+        return redirect()->route('items.index')->with('success', "Item {$item->name} berhasil ditambahkan ke dalam sistem.");
     }
 
     public function show(Item $item)
@@ -117,7 +111,6 @@ class ItemController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($item->image && Storage::disk('public')->exists($item->image)) {
                 Storage::disk('public')->delete($item->image);
             }
@@ -126,7 +119,7 @@ class ItemController extends Controller
 
         $item->update($validated);
 
-        return redirect()->route('items.show', $item)->with('success', "Data barang {$item->name} berhasil diperbarui!");
+        return redirect()->route('items.show', $item)->with('success', "Data spesifikasi {$item->name} berhasil diperbarui.");
     }
 
     public function destroy(Item $item)
@@ -137,7 +130,7 @@ class ItemController extends Controller
         }
         $item->delete();
 
-        return redirect()->route('items.index')->with('success', "Barang {$name} berhasil dihapus.");
+        return redirect()->route('items.index')->with('success', "Item {$name} telah dihapus dari basis data.");
     }
 
     public function exportCsv(): StreamedResponse
@@ -155,10 +148,8 @@ class ItemController extends Controller
 
         $callback = function () use ($items) {
             $handle = fopen('php://output', 'w');
-            // Add UTF-8 BOM for Excel compatibility
             fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
 
-            // Header row
             fputcsv($handle, ['ID', 'SKU', 'Nama Barang', 'Kategori', 'Satuan', 'Harga Beli (Rp)', 'Harga Jual (Rp)', 'Stok', 'Batas Minimum', 'Status Stok']);
 
             foreach ($items as $item) {

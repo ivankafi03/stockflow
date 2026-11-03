@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('sku')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('unit')->default('pcs'); // pcs, box, kg, pack, unit
+            $table->string('unit')->default('pcs');
             $table->decimal('cost_price', 12, 2)->default(0);
             $table->decimal('selling_price', 12, 2)->default(0);
             $table->integer('stock')->default(0);

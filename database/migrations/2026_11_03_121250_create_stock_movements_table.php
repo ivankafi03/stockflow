@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('type', ['in', 'out']);
             $table->integer('quantity');
-            $table->string('reference_number')->nullable(); // e.g. PO-102, INV-001
+            $table->string('reference_number')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

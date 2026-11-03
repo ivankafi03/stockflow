@@ -13,18 +13,16 @@ use Illuminate\Support\Str;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // 1. Create Default Demo User
         $user = User::create([
             'name'     => 'Demo Admin',
             'email'    => 'admin@stockflow.test',
             'password' => Hash::make('password'),
         ]);
 
-        // 2. Create Categories
         $categories = [
             'Bahan Kemasan & Packing' => [
                 'desc' => 'Karton box, lakban, plastik bubble wrap, stiker fragile, dan tali pengikat.',
@@ -56,7 +54,7 @@ class DatabaseSeeder extends Seeder
                         'unit' => 'roll',
                         'cost_price' => 140000,
                         'selling_price' => 185000,
-                        'stock' => 4, // LOW STOCK WARNING!
+                        'stock' => 4,
                         'min_stock' => 8,
                     ],
                     [
@@ -66,7 +64,7 @@ class DatabaseSeeder extends Seeder
                         'unit' => 'roll',
                         'cost_price' => 95000,
                         'selling_price' => 130000,
-                        'stock' => 0, // OUT OF STOCK!
+                        'stock' => 0,
                         'min_stock' => 5,
                     ],
                 ]
@@ -87,7 +85,7 @@ class DatabaseSeeder extends Seeder
                     [
                         'sku' => 'ELC-PRN-102',
                         'name' => 'Thermal Shipping Label Printer 80mm',
-                        'description' => 'Printer cetak label resi dan barcode tanpa tinta (thermal direct).',
+                        'description' => 'Printer cetak label resi dan barcode tanpa tinta.',
                         'unit' => 'unit',
                         'cost_price' => 650000,
                         'selling_price' => 890000,
@@ -101,7 +99,7 @@ class DatabaseSeeder extends Seeder
                         'unit' => 'pcs',
                         'cost_price' => 120000,
                         'selling_price' => 165000,
-                        'stock' => 3, // LOW STOCK WARNING!
+                        'stock' => 3,
                         'min_stock' => 5,
                     ],
                 ]
@@ -169,7 +167,6 @@ class DatabaseSeeder extends Seeder
                 $stock = $itemData['stock'];
                 $item = $category->items()->create($itemData);
 
-                // Record initial stock transaction
                 if ($stock > 0) {
                     StockMovement::create([
                         'item_id'          => $item->id,
@@ -184,10 +181,8 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Add some realistic recent movements (In & Out)
         $items = Item::where('stock', '>', 5)->take(3)->get();
         foreach ($items as $item) {
-            // Outbound movement
             $outQty = rand(2, 4);
             StockMovement::create([
                 'item_id'          => $item->id,
@@ -195,11 +190,10 @@ class DatabaseSeeder extends Seeder
                 'type'             => 'out',
                 'quantity'         => $outQty,
                 'reference_number' => 'SJ-OUT-' . rand(1000, 9999),
-                'notes'            => 'Pengeluaran rutin untuk kebutuhan divisi operasional.',
+                'notes'            => 'Pengeluaran rutin untuk kebutuhan operasional.',
                 'created_at'       => now()->subHours(rand(1, 48)),
             ]);
 
-            // Inbound movement
             $inQty = rand(5, 10);
             StockMovement::create([
                 'item_id'          => $item->id,
@@ -207,7 +201,7 @@ class DatabaseSeeder extends Seeder
                 'type'             => 'in',
                 'quantity'         => $inQty,
                 'reference_number' => 'PO-SUPP-' . rand(1000, 9999),
-                'notes'            => 'Penerimaan restock barang dari supplier resmi.',
+                'notes'            => 'Penerimaan restock barang dari supplier terdaftar.',
                 'created_at'       => now()->subHours(rand(1, 24)),
             ]);
         }

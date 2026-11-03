@@ -16,7 +16,6 @@ class DashboardController extends Controller
         $totalCategories = Category::count();
         $totalStockQty = Item::sum('stock');
         
-        // SQLite / MySQL compatible asset valuation
         $totalAssetValue = Item::all()->sum(function ($item) {
             return $item->stock * (float) $item->cost_price;
         });
